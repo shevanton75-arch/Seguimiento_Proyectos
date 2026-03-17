@@ -1,0 +1,88 @@
+Código Final Combinado (App.tsx)
+import React from 'react';
+import { ThemeProvider, CssBaseline, Container, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { createTheme } from '@mui/material/styles';
+
+// 1. Tema MUI (theme.ts)
+const theme = createTheme({
+  palette: {
+    primary: { main: '#1976d2' },
+    secondary: { main: '#dc004e' }
+  }
+});
+
+// 2. Componente Projects (pages/Projects.tsx)
+const Projects = () => {
+  const projects = [
+    { id: 1, name: "Edificio A", progress: 35, budget: 500000 },
+    { id: 2, name: "Puente B", progress: 68, budget: 1200000 }
+  ];
+
+  return (
+    <div>
+      <Typography variant="h4" gutterBottom>Proyectos</Typography>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Avance</TableCell>
+              <TableCell>Presupuesto</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {projects.map((project) => (
+              <TableRow key={project.id}>
+                <TableCell>{project.name}</TableCell>
+                <TableCell>{project.progress}%</TableCell>
+                <TableCell>${project.budget.toLocaleString()}</TableCell>
+                <TableCell>
+                  <Button 
+                    variant="contained" 
+                    size="small"
+                    href={`/project/${project.id}`}
+                  >
+                    Ver Detalle
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  );
+};
+
+// 3. Componente ProjectDetail (pages/ProjectDetail.tsx)
+const ProjectDetail = () => {
+  const { id } = useParams();
+
+  return (
+    <div>
+      <Typography variant="h4" gutterBottom>Detalle del Proyecto {id}</Typography>
+      <Typography>Información detallada del proyecto...</Typography>
+    </div>
+  );
+};
+
+// 4. Componente Principal App (App.tsx)
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+          <Routes>
+            <Route path="/" element={<Projects />} />
+            <Route path="/project/:id" element={<ProjectDetail />} />
+          </Routes>
+        </Container>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+}
+
+export default App;
